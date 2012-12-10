@@ -38,10 +38,13 @@ auth_t::auth_t(context_t& context):
 {
     ERR_load_crypto_strings();
 
-    // NOTE: Allowing the exception to propagate here, as this is a fatal error.
-    std::vector<std::string> keys(
-        context.storage<objects>("core")->list("keys")
-    );
+    std::vector<std::string> keys;
+    
+    try {
+        keys = context.storage<objects>("core")->list("keys");
+    } catch(const std::exception& e) {
+        // Ignore it.
+    }
 
     for(std::vector<std::string>::const_iterator it = keys.begin();
         it != keys.end();
