@@ -1,3 +1,9 @@
+cocaine-core (0.9.10) unstable; urgency=low
+
+  * Do not die if there are no RSA keys in the storage.
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Mon, 10 Dec 2012 22:15:00 +0400
+
 cocaine-core (0.9.9) unstable; urgency=low
 
   * Added missing header files in installation
