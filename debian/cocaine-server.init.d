@@ -17,7 +17,7 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC="the omnipotent"
 NAME=cocaine-server
 DAEMON=/usr/bin/cocained
-DAEMON_ARGS="--daemonize"
+DAEMON_ARGS="--daemonize --server:announce-interval 1 --server:announce tcp://*:5001"
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
