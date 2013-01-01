@@ -1,3 +1,9 @@
+cocaine-core (0.9.11) unstable; urgency=low
+
+  * add  args --server:announce
+
+ -- Evgeniy Polyakov <zbr@ioremap.net>  Tue, 01 Jan 2013 18:46:44 +0400
+
 cocaine-core (0.9.10) unstable; urgency=low
 
   * Do not die if there are no RSA keys in the storage.
