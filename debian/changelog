@@ -1,3 +1,9 @@
+cocaine-core (0.9.12) unstable; urgency=low
+
+  * Added missing dependencies for cocaine-tool.
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Thu, 17 Jan 2013 22:26:42 +0400
+
 cocaine-core (0.9.11) unstable; urgency=low
 
   * add  args --server:announce
