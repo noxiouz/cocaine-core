@@ -86,6 +86,17 @@ protect(T& object) {
 // ZeroMQ socket wrapper
 // ---------------------
 
+#define COCAINE_EINTR_GUARD(command)        \
+    do {                                    \
+        try {                               \
+            command;                        \
+        } catch(const zmq::error_t& e) {    \
+            if(e.num() != EINTR) {          \
+                throw;                      \
+            }                               \
+        }                                   \
+    } while(true);
+
 class socket_t: 
     public boost::noncopyable,
     public birth_control<socket_t>
@@ -100,7 +111,9 @@ class socket_t:
         bool send(zmq::message_t& message,
                   int flags = 0)
         {
-            return m_socket.send(message, flags);
+            COCAINE_EINTR_GUARD(
+                return m_socket.send(message, flags);
+            )
         }
 
         template<class T>
@@ -132,7 +145,9 @@ class socket_t:
         bool recv(zmq::message_t * message,
                   int flags = 0)
         {
-            return m_socket.recv(message, flags);
+            COCAINE_EINTR_GUARD(
+                return m_socket.recv(message, flags);
+            )
         }
 
         template<class T>
@@ -182,14 +197,18 @@ class socket_t:
                         void * value,
                         size_t * size)
         {
-            m_socket.getsockopt(name, value, size);
+            COCAINE_EINTR_GUARD(
+                return m_socket.getsockopt(name, value, size);
+            )
         }
 
         void setsockopt(int name,
                         const void * value,
                         size_t size)
         {
-            m_socket.setsockopt(name, value, size);
+            COCAINE_EINTR_GUARD(
+                return m_socket.setsockopt(name, value, size);
+            )
         }
 
         void drop();
@@ -241,6 +260,8 @@ class socket_t:
         zmq::socket_t m_socket;
         std::string m_endpoint;
 };
+
+#undef COCAINE_EINTR_GUARD
 
 // Socket options
 // --------------
