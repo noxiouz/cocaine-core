@@ -277,17 +277,20 @@ Json::Value engine_t::info() const {
     Json::Value results(Json::objectValue);
 
     if(m_state == running) {
-        results["queue-depth"] = static_cast<Json::UInt>(m_queue.size());
+        boost::unique_lock<boost::mutex> queue_lock(m_queue_mutex);
 
-        results["slaves"]["total"] = static_cast<Json::UInt>(m_pool.size());
+        results["queue"]["depth"] = static_cast<Json::UInt>(m_queue.size());
+        results["queue"]["capacity"] = static_cast<Json::UInt>(m_manifest.policy.queue_limit);
 
-        results["slaves"]["busy"] = static_cast<Json::UInt>(
-            std::count_if(
-                m_pool.begin(),
-                m_pool.end(),
-                select::state<slave::busy>()
-            )
+        size_t active = std::count_if(
+            m_pool.begin(),
+            m_pool.end(),
+            select::state<slave::busy>()
         );
+
+        results["slaves"]["active"] = static_cast<Json::UInt>(active);
+        results["slaves"]["idle"] = static_cast<Json::UInt>(m_pool.size() - active);
+        results["slaves"]["capacity"] = static_cast<Json::UInt>(m_manifest.policy.pool_limit);
     }
 
     results["state"] = state_names[m_state];
