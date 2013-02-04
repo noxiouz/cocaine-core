@@ -1,3 +1,11 @@
+cocaine-core (0.9.13) lucid; urgency=low
+
+  * Fixed a race condition in engine::info().
+  * Added some more information in engine::info() for Dealer needs.
+  * Properly handle EINTR in ZeroMQ socket methods.
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Mon, 04 Feb 2013 21:31:00 +0400
+
 cocaine-core (0.9.12) unstable; urgency=low
 
   * Added missing dependencies for cocaine-tool.
