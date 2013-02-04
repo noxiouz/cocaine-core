@@ -161,7 +161,7 @@ class engine_t:
         job_queue_t m_queue;
 
         // Job queue synchronization.
-        boost::mutex m_queue_mutex;
+        mutable boost::mutex m_queue_mutex;
         boost::condition_variable m_queue_condition;
 
         // Slave pool.
