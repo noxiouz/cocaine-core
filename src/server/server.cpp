@@ -81,7 +81,12 @@ server_t::server_t(context_t& context, server_config_t config):
     if(!config.announce_endpoints.empty()) {
         m_announces.reset(new io::socket_t(m_context, ZMQ_PUB));
         m_announces->setsockopt(ZMQ_LINGER, &linger, sizeof(linger));
-        
+
+        uint64_t hwm = 5;
+
+        // Avoids announce data being cached for every disconnected peer.
+        m_announces->setsockopt(ZMQ_HWM, &hwm, sizeof(hmw));
+
         for(std::vector<std::string>::const_iterator it = config.announce_endpoints.begin();
             it != config.announce_endpoints.end();
             ++it)

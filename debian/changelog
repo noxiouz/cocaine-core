@@ -1,3 +1,10 @@
+cocaine-core (0.9.14) lucid; urgency=low
+
+  * Set HWM on the announce socket to avoid announce data being cached for
+    every disconnected peer.
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Mon, 04 Feb 2013 23:06:30 +0400
+
 cocaine-core (0.9.13) lucid; urgency=low
 
   * Fixed a race condition in engine::info().
