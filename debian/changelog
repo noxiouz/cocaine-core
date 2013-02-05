@@ -1,3 +1,9 @@
+cocaine-core (0.9.15) lucid; urgency=low
+
+  * Fixed the race condition again.
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Tue, 05 Feb 2013 05:14:06 +0400
+
 cocaine-core (0.9.14) lucid; urgency=low
 
   * Set HWM on the announce socket to avoid announce data being cached for
