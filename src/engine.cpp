@@ -672,6 +672,8 @@ void engine_t::pump() {
                 command
             );
 
+            boost::unique_lock<boost::mutex> lock(m_mutex);
+
             if(success) {
                 it->second->process_event(events::invoke(job));
             } else {
@@ -682,11 +684,9 @@ void engine_t::pump() {
 
                 it->second->process_event(events::terminate());
                 m_pool.erase(it);
-                
-                {
-                    boost::unique_lock<boost::mutex> queue_lock(m_queue_mutex);
-                    m_queue.push_front(job);
-                }
+
+                boost::unique_lock<boost::mutex> queue_lock(m_queue_mutex);
+                m_queue.push_front(job);
             }
         } else {
             break;
@@ -696,13 +696,20 @@ void engine_t::pump() {
     // NOTE: Balance the slave pool in order to keep it in a proper shape
     // based on the queue size and other policies.
 
+    size_t queue_size = 0;
+
+    {
+        boost::unique_lock<boost::mutex> queue_lock(m_queue_mutex);
+        queue_size = m_queue.size();
+    }
+
     if(m_pool.size() < m_manifest.policy.pool_limit &&
-       m_pool.size() * m_manifest.policy.grow_threshold < m_queue.size() * 2)
+       m_pool.size() * m_manifest.policy.grow_threshold < queue_size * 2)
     {
         unsigned int target = std::min(
             m_manifest.policy.pool_limit,
             std::max(
-                2 * m_queue.size() / m_manifest.policy.grow_threshold, 
+                2 * queue_size / m_manifest.policy.grow_threshold,
                 1UL
             )
         );
