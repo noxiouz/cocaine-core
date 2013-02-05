@@ -85,7 +85,7 @@ server_t::server_t(context_t& context, server_config_t config):
         uint64_t hwm = 5;
 
         // Avoids announce data being cached for every disconnected peer.
-        m_announces->setsockopt(ZMQ_HWM, &hwm, sizeof(hmw));
+        m_announces->setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
 
         for(std::vector<std::string>::const_iterator it = config.announce_endpoints.begin();
             it != config.announce_endpoints.end();
