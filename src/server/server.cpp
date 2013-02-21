@@ -82,10 +82,15 @@ server_t::server_t(context_t& context, server_config_t config):
         m_announces.reset(new io::socket_t(m_context, ZMQ_PUB));
         m_announces->setsockopt(ZMQ_LINGER, &linger, sizeof(linger));
 
-        uint64_t hwm = 5;
-
         // Avoids announce data being cached for every disconnected peer.
-        m_announces->setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
+        #if ZMQ_VERSION >= 30203
+            uint32_t hwm = 5;
+            m_announces->setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
+            m_announces->setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
+        #else
+            uint64_t hwm = 5;
+            m_announces->setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
+        #endif
 
         for(std::vector<std::string>::const_iterator it = config.announce_endpoints.begin();
             it != config.announce_endpoints.end();
