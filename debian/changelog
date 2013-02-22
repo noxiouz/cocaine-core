@@ -1,3 +1,10 @@
+cocaine-core (0.9.16) lucid; urgency=low
+
+  * Added more compatibility with zmq 3.x
+  * Determining socket connection string for clients (zmq 3.x)
+
+ -- Rim Zaidullin <rimz@yandex-team.ru>  Fri, 22 Feb 2013 23:33:09 +0300
+
 cocaine-core (0.9.15) lucid; urgency=low
 
   * Fixed the race condition again.
