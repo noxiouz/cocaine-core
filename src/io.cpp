@@ -40,13 +40,34 @@ void socket_t::bind(const std::string& endpoint) {
     m_socket.bind(endpoint.c_str());
 
     // Try to determine the connection string for clients.
-    // XXX: Fix it when migrating to ZeroMQ 3.1+
     size_t position = endpoint.find_last_of(":");
 
     if(position != std::string::npos) {
+        ++position;
+        std::string port = endpoint.substr(position, endpoint.length() - position);
+
+        #if ZMQ_VERSION >= 30203
+            if ("*" == port) {
+                size_t buff_size = 512;
+                char buff[512];
+                memset(buff, 0, buff_size);
+                
+                getsockopt(ZMQ_LAST_ENDPOINT, buff, &buff_size);
+
+                std::string last_endpoint(buff);
+                size_t pos = last_endpoint.find_last_of(":");
+
+                if (pos != std::string::npos) {
+                    ++pos;
+                    port = last_endpoint.substr(pos, last_endpoint.length() - pos);
+                }
+            }
+        #endif
+
         m_endpoint = std::string("tcp://")
-                     + m_context.config.runtime.hostname
-                     + endpoint.substr(position, std::string::npos);
+                  + m_context.config.runtime.hostname
+                  + ":"
+                  + port;
     } else {
         m_endpoint = "<local>";
     }
