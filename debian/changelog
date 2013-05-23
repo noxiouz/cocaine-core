@@ -1,3 +1,9 @@
+cocaine-core (0.9.17) lucid; urgency=low
+
+  * Unblock signals on fork().
+
+ -- Andrey Sibiryov <kobolog@yandex-team.ru>  Thu, 23 May 2013 18:55:43 +0400
+
 cocaine-core (0.9.16) lucid; urgency=low
 
   * Added more compatibility with zmq 3.x
