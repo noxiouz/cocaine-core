@@ -79,7 +79,7 @@ void master_t::spawn() {
 
         sigset_t signals;
 
-        sigfillset(&signas);
+        sigfillset(&signals);
 
         ::sigprocmask(SIG_UNBLOCK, &signals, NULL);
 
