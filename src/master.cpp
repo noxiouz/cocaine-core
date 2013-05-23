@@ -19,6 +19,7 @@
 */
 
 #include <boost/format.hpp>
+#include <csignal>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -75,6 +76,12 @@ void master_t::spawn() {
 
     if(m_pid == 0) {
         int rv = 0;
+
+        sigset_t signals;
+
+        sigfillset(&signas);
+
+        ::sigprocmask(SIG_UNBLOCK, &signals, NULL);
 
 #ifdef HAVE_CGROUPS
         if(m_engine.group()) {
